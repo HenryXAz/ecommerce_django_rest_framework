@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
 # serializers
-from apps.users.api.serializers import UserSerializer, TestUserSerializer
+from apps.users.api.serializers import UserSerializer, UserListSerializer
 
 #models
 from apps.users.models import User
@@ -16,7 +16,7 @@ def user_api_view(request):
 
   if request.method == 'GET':
     users = User.objects.all().values('id', 'username', 'email', 'password')
-    user_serializer = UserSerializer(users, many=True)
+    user_serializer = UserListSerializer(users, many=True)
 
     return Response(user_serializer.data, status=status.HTTP_200_OK)
   
@@ -30,13 +30,12 @@ def user_api_view(request):
     else:
       return Response(user_serializer.errors)
 
-
+@api_view(['GET', 'PUT', 'DELETE'])
 def user_detail_api_view(request, pk=None):
   # query set
   user = User.objects.filter(pk=pk).first()
 
   # validation
-
   if user:
 
       # retrive
@@ -55,7 +54,7 @@ def user_detail_api_view(request, pk=None):
       elif request.method == 'DELETE':
           user.delete()
           return Response(data=None, status=status.HTTP_204_NO_CONTENT)
-
+  return Response({'message': 'user does not exists'}, status=status.HTTP_404_NOT_FOUND)
          
       
 
