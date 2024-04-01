@@ -46,13 +46,10 @@ coverage.xml
 
 # Developers
 *.sw*
-manage.py
 .DS_Store
 
 # example database
 drf_example
 db.sqlite3
 
-# migrations
-migrations/
 .env
